@@ -27,10 +27,10 @@ describe('LocalSavePurchases', () => {
     await sut.save('purchases');
 
     expect(cacheStore.deleteCallsCount).toBe(1)
-    expect(cacheStore.key).toBe('purchases')
+    expect(cacheStore.insertKey).toBe('purchases')
   });
 
-  test('Should not insert new Cache if delete fails', async () => {
+  test('Should not insert new Cache if delete fails', () => {
     const { sut, cacheStore } = makeSut();
 
     jest
@@ -41,5 +41,15 @@ describe('LocalSavePurchases', () => {
 
     expect(cacheStore.insertCallsCount).toBe(0);
     expect(promise).rejects.toThrow();
+  });
+
+  test('Should insert new Cache if delete succeds', async () => {
+    const { sut, cacheStore } = makeSut();
+
+    await sut.save('purchases');
+
+    expect(cacheStore.deleteCallsCount).toBe(1);
+    expect(cacheStore.insertCallsCount).toBe(1);
+    expect(cacheStore.insertKey).toBe('purchases'); 
   });
 });

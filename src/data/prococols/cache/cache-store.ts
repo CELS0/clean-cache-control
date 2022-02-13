@@ -1,15 +1,22 @@
 interface ICacheStore {
   delete: (key: string) => void;
+  insert: (insertKey: string) => void;
 }
 
 class CacheStoreSpy implements ICacheStore {
   deleteCallsCount = 0;
-  key: string;
+  deletekey: string;
   insertCallsCount = 0;
+  insertKey: string
+  
+  insert(insertKey: string): void{
+    this.insertCallsCount++;
+    this.insertKey = insertKey;
+  };
 
-  delete(key: string): void {
-    this.deleteCallsCount++
-    this.key = key;
+  delete(deletekey: string): void {
+    this.deleteCallsCount++;
+    this.deletekey = deletekey;
   }
 }
 
