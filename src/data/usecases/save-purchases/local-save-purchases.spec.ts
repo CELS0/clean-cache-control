@@ -29,4 +29,17 @@ describe('LocalSavePurchases', () => {
     expect(cacheStore.deleteCallsCount).toBe(1)
     expect(cacheStore.key).toBe('purchases')
   });
+
+  test('Should not insert new Cache if delete fails', async () => {
+    const { sut, cacheStore } = makeSut();
+
+    jest
+      .spyOn(cacheStore, 'delete')
+      .mockImplementation(() => { throw new Error() })
+
+    const promise = sut.save('purchases');
+
+    expect(cacheStore.insertCallsCount).toBe(0);
+    expect(promise).rejects.toThrow();
+  });
 });
