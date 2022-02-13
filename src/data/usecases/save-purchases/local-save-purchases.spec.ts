@@ -1,25 +1,5 @@
-class LocalSavePurchases {
-  constructor(private cacheStore: CacheStore) { }
-
-  async save(key: string): Promise<void> {
-    this.cacheStore.delete(key);
-  }
-}
-
-
-interface CacheStore {
-  delete: (key: string) => void;
-}
-
-class CacheStoreSpy implements CacheStore {
-  deleteCallsCount = 0;
-  key: string;
-
-  delete(key: string): void {
-    this.deleteCallsCount++
-    this.key = key;
-  }
-}
+import { LocalSavePurchases } from '../'
+import { CacheStoreSpy } from '@/data/prococols/cache'
 
 type SutTypes = {
   sut: LocalSavePurchases;
@@ -36,7 +16,7 @@ const makeSut = (): SutTypes => {
 
 describe('LocalSavePurchases', () => {
   test('Should not delete cache on sut.init', () => {
-    const {  cacheStore } = makeSut();
+    const { cacheStore } = makeSut();
 
     expect(cacheStore.deleteCallsCount).toBe(0)
   });
@@ -47,13 +27,6 @@ describe('LocalSavePurchases', () => {
     await sut.save('purchases');
 
     expect(cacheStore.deleteCallsCount).toBe(1)
-  });
-
-  test('Should call delete with correct key', async () => {
-    const { sut, cacheStore } = makeSut();
-
-    await sut.save('purchases');
-
     expect(cacheStore.key).toBe('purchases')
   });
 });
