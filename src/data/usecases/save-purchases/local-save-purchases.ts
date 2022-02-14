@@ -1,11 +1,12 @@
 import { ICacheStore } from '@/data/prococols/cache'
+import { SavePurchases } from '@/domain/usecases';
 
-class LocalSavePurchases {
+class LocalSavePurchases implements SavePurchases {
   constructor(private cacheStore: ICacheStore) { }
 
-  async save(key: string): Promise<void> {
-    this.cacheStore.delete(key);
-    this.cacheStore.insert(key);
+  async save(purchases: Array<SavePurchases.Params>): Promise<void> {
+    this.cacheStore.delete('purchases');
+    this.cacheStore.insert('purchases', purchases);
   }
 }
 
