@@ -1,13 +1,11 @@
+import { PurchasesModel } from "../models/purchase-model";
+
 interface SavePurchases {
     save: (purchases: Array<SavePurchases.Params>) => Promise<void>;
 }
 
 namespace SavePurchases {
-    export type Params = {
-        id: string,
-        date: Date,
-        value: number
-    }
+    export type Params = PurchasesModel;
 }
 
 
