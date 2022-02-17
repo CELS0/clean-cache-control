@@ -1,7 +1,6 @@
+import { mockPurchases, CacheStoreSpy } from '@/data/tests';
+import { SavePurchases } from '@/domain/usecases';
 import { LocalSavePurchases } from '../'
-import { CacheStoreSpy } from '@/data/prococols/cache'
-import { SavePurchases } from '@/domain/usecases'
-import { mockPurchases } from '@/data/tests'
 
 
 type SutTypes = {
@@ -39,9 +38,7 @@ describe('LocalSavePurchases', () => {
   test('Should not insert new Cache if delete fails', () => {
     const { sut, cacheStore, purchases } = makeSut();
 
-    jest
-      .spyOn(cacheStore, 'delete')
-      .mockImplementation(() => { throw new Error() })
+    cacheStore.simulateDeleteError();
 
     const promise = sut.save(purchases);
 
@@ -57,5 +54,15 @@ describe('LocalSavePurchases', () => {
     expect(cacheStore.deleteCallsCount).toBe(1);
     expect(cacheStore.insertCallsCount).toBe(1);
     expect(cacheStore.insertValues).toEqual(purchases);
+  });
+
+  test('Should throw if insert throws', async () => {
+    const { sut, cacheStore, purchases } = makeSut();
+
+    cacheStore.simulateInsertError();
+
+    const promise = sut.save(purchases);
+
+    expect(promise).rejects.toThrow();
   });
 });
