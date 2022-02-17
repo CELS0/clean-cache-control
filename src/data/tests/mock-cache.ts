@@ -3,27 +3,33 @@ import { ICacheStore } from "../prococols/cache";
 
   
   class CacheStoreSpy implements ICacheStore {
-    messages: Array<CacheStoreSpy.Message> = [];
+  
+    actions: Array<CacheStoreSpy.Action> = [];
     deletekey: string;
     insertKey: string
     insertValues: Array<SavePurchases.Params>;
     
     insert(insertKey: string, value:any): void{
-      this.messages.push(CacheStoreSpy.Message.insert);
+      this.actions.push(CacheStoreSpy.Action.insert);
       this.insertKey = insertKey;
       this.insertValues = value;
     };
   
     delete(deletekey: string): void {
-      this.messages.push(CacheStoreSpy.Message.delete);
+      this.actions.push(CacheStoreSpy.Action.delete);
       this.deletekey = deletekey;
     }
+
+    replace(key: string, value:any): void {
+      this.delete(key);
+      this.insert(key,value);
+    };
 
     simulateDeleteError (): void {
       jest
       .spyOn(CacheStoreSpy.prototype, 'delete')
       .mockImplementationOnce(()=>{
-        this.messages.push(CacheStoreSpy.Message.delete);
+        this.actions.push(CacheStoreSpy.Action.delete);
         throw new Error()
       })
     }
@@ -32,14 +38,14 @@ import { ICacheStore } from "../prococols/cache";
       jest
       .spyOn(CacheStoreSpy.prototype, 'insert')
       .mockImplementationOnce(()=>{
-        this.messages.push(CacheStoreSpy.Message.insert);
+        this.actions.push(CacheStoreSpy.Action.insert);
         throw new Error()
       })
     }
   }
 
   namespace CacheStoreSpy {
-    export enum Message {
+    export enum Action {
       delete,
       insert,
     }
