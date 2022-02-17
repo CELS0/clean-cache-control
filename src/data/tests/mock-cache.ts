@@ -3,33 +3,45 @@ import { ICacheStore } from "../prococols/cache";
 
   
   class CacheStoreSpy implements ICacheStore {
-    deleteCallsCount = 0;
+    messages: Array<CacheStoreSpy.Message> = [];
     deletekey: string;
-    insertCallsCount = 0;
     insertKey: string
     insertValues: Array<SavePurchases.Params>;
     
     insert(insertKey: string, value:any): void{
-      this.insertCallsCount++;
+      this.messages.push(CacheStoreSpy.Message.insert);
       this.insertKey = insertKey;
       this.insertValues = value;
     };
   
     delete(deletekey: string): void {
-      this.deleteCallsCount++;
+      this.messages.push(CacheStoreSpy.Message.delete);
       this.deletekey = deletekey;
     }
 
     simulateDeleteError (): void {
       jest
       .spyOn(CacheStoreSpy.prototype, 'delete')
-      .mockImplementationOnce(()=>{throw new Error()})
+      .mockImplementationOnce(()=>{
+        this.messages.push(CacheStoreSpy.Message.delete);
+        throw new Error()
+      })
     }
 
     simulateInsertError (): void {
       jest
       .spyOn(CacheStoreSpy.prototype, 'insert')
-      .mockImplementationOnce(()=>{throw new Error()})
+      .mockImplementationOnce(()=>{
+        this.messages.push(CacheStoreSpy.Message.insert);
+        throw new Error()
+      })
+    }
+  }
+
+  namespace CacheStoreSpy {
+    export enum Message {
+      delete,
+      insert,
     }
   }
   
