@@ -1,7 +1,7 @@
 import { ICacheStore } from '@/data/prococols/cache'
 import { SavePurchases } from '@/domain/usecases';
 
-class LocalSavePurchases implements SavePurchases {
+class LocalLoadPurchases implements SavePurchases {
   constructor(
     private cacheStore: ICacheStore,
     private timestamp: Date
@@ -12,4 +12,4 @@ class LocalSavePurchases implements SavePurchases {
   }
 }
 
-export { LocalSavePurchases }
+export { LocalLoadPurchases }
