@@ -3,10 +3,10 @@ import { ICacheStore } from "../prococols/cache";
 
   
   class CacheStoreSpy implements ICacheStore {
-  
     actions: Array<CacheStoreSpy.Action> = [];
     deletekey: string;
-    insertKey: string
+    insertKey: string;
+    fetchKey: string;
     insertValues: Array<SavePurchases.Params>;
     
     insert(insertKey: string, value:any): void{
@@ -18,7 +18,12 @@ import { ICacheStore } from "../prococols/cache";
     delete(deletekey: string): void {
       this.actions.push(CacheStoreSpy.Action.delete);
       this.deletekey = deletekey;
-    }
+    };
+
+    fetch(key: string): void {
+      this.actions.push(CacheStoreSpy.Action.fetch);
+      this.fetchKey = key;
+    };
 
     replace(key: string, value:any): void {
       this.delete(key);
@@ -48,6 +53,7 @@ import { ICacheStore } from "../prococols/cache";
     export enum Action {
       delete,
       insert,
+      fetch,
     }
   }
   

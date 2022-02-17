@@ -3,10 +3,12 @@ import { SavePurchases } from "@/domain/usecases";
 interface ICacheStore {
   delete: (key: string) => void;
   insert: (insertKey: string, value: any) => void;
+  fetch:(key: string) => void;
   replace: (key: string, value:any)=> void;
 }
 
 class CacheStoreSpy implements ICacheStore {
+  fetch: () => void;
   deleteCallsCount = 0;
   deletekey: string;
   insertCallsCount = 0;
