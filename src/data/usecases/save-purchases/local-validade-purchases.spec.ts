@@ -50,4 +50,40 @@ describe('LocalValidadePurchases', () => {
     expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
     expect(cacheStore.fetchKey).toBe('purchases');
   });
+
+  // test('Should have no sidde effect if cache is expired', async () => {
+  //   const { timestamp, currentDate } = getCacheExpirationDate();
+  //   timestamp.setSeconds(timestamp.getSeconds() - 1);
+
+  //   const { cacheStore, sut, purchases } = makeSut(currentDate);
+
+  //   cacheStore.fetchResults = {
+  //     timestamp,
+  //     value: purchases,
+  //   }
+
+  //   const result = await sut.loadAll();
+
+  //   expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+  //   expect(cacheStore.fetchKey).toBe('purchases');
+  //   expect(cacheStore.deletekey).toBe('purchases');
+  //   expect(result).toEqual([]);
+  // });
+
+  // test('Should return an empty list if cache is on expiration date', async () => {
+  //   const { timestamp, currentDate } = getCacheExpirationDate();
+  //   const { cacheStore, sut, purchases } = makeSut(currentDate);
+
+  //   cacheStore.fetchResults = {
+  //     timestamp,
+  //     value: purchases,
+  //   }
+
+  //   const result = await sut.loadAll();
+
+  //   expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+  //   expect(cacheStore.fetchKey).toBe('purchases');
+  //   expect(cacheStore.deletekey).toBe('purchases');
+  //   expect(result).toEqual([]);
+  // });
 });

@@ -68,9 +68,8 @@ describe('LocalLoadPurchases', () => {
 
     const result = await sut.loadAll();
 
-    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
     expect(cacheStore.fetchKey).toBe('purchases');
-    expect(cacheStore.deletekey).toBe('purchases');
     expect(result).toEqual([]);
   });
 
@@ -85,9 +84,8 @@ describe('LocalLoadPurchases', () => {
 
     const result = await sut.loadAll();
 
-    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
     expect(cacheStore.fetchKey).toBe('purchases');
-    expect(cacheStore.deletekey).toBe('purchases');
     expect(result).toEqual([]);
   });
 
