@@ -39,9 +39,9 @@ describe('LocalValidadePurchases', () => {
 
   test('Should has no side effect if load succeds', () => {
     const { timestamp, currentDate } = getCacheExpirationDate();
-    timestamp.setSeconds(timestamp.getSeconds() - 1);
+    timestamp.setSeconds(timestamp.getSeconds() + 1);
 
-    const { cacheStore, sut, purchases } = makeSut(currentDate);
+    const { cacheStore, sut } = makeSut(currentDate);
 
     cacheStore.fetchResults = { timestamp };
 
@@ -51,39 +51,31 @@ describe('LocalValidadePurchases', () => {
     expect(cacheStore.fetchKey).toBe('purchases');
   });
 
-  // test('Should have no sidde effect if cache is expired', async () => {
-  //   const { timestamp, currentDate } = getCacheExpirationDate();
-  //   timestamp.setSeconds(timestamp.getSeconds() - 1);
+  test('Should delete cache if its expired', () => {
+    const { timestamp, currentDate } = getCacheExpirationDate();
+    timestamp.setSeconds(timestamp.getSeconds() - 1);
 
-  //   const { cacheStore, sut, purchases } = makeSut(currentDate);
+    const { cacheStore, sut } = makeSut(currentDate);
 
-  //   cacheStore.fetchResults = {
-  //     timestamp,
-  //     value: purchases,
-  //   }
+    cacheStore.fetchResults = { timestamp };
 
-  //   const result = await sut.loadAll();
+    sut.validate();
 
-  //   expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
-  //   expect(cacheStore.fetchKey).toBe('purchases');
-  //   expect(cacheStore.deletekey).toBe('purchases');
-  //   expect(result).toEqual([]);
-  // });
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+    expect(cacheStore.fetchKey).toBe('purchases');
+    expect(cacheStore.deletekey).toBe('purchases');
+  });
 
-  // test('Should return an empty list if cache is on expiration date', async () => {
-  //   const { timestamp, currentDate } = getCacheExpirationDate();
-  //   const { cacheStore, sut, purchases } = makeSut(currentDate);
+  test('Should delete cache if its on expiration date', () => {
+    const { timestamp, currentDate } = getCacheExpirationDate();
+    const { cacheStore, sut } = makeSut(currentDate);
 
-  //   cacheStore.fetchResults = {
-  //     timestamp,
-  //     value: purchases,
-  //   }
+    cacheStore.fetchResults = { timestamp };
 
-  //   const result = await sut.loadAll();
+    sut.validate();
 
-  //   expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
-  //   expect(cacheStore.fetchKey).toBe('purchases');
-  //   expect(cacheStore.deletekey).toBe('purchases');
-  //   expect(result).toEqual([]);
-  // });
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+    expect(cacheStore.fetchKey).toBe('purchases');
+    expect(cacheStore.deletekey).toBe('purchases');
+  });
 });
