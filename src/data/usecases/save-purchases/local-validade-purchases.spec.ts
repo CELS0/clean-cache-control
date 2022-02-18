@@ -1,4 +1,4 @@
-import { mockPurchases, CacheStoreSpy } from '@/data/tests';
+import { mockPurchases, CacheStoreSpy, getCacheExpirationDate } from '@/data/tests';
 import { SavePurchases } from '@/domain/usecases';
 import { LocalLoadPurchases } from './local-load-purchases';
 
@@ -35,5 +35,19 @@ describe('LocalValidadePurchases', () => {
 
     expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
     expect(cacheStore.deletekey).toBe('purchases');
+  });
+
+  test('Should has no side effect if load succeds', () => {
+    const { timestamp, currentDate } = getCacheExpirationDate();
+    timestamp.setSeconds(timestamp.getSeconds() - 1);
+
+    const { cacheStore, sut, purchases } = makeSut(currentDate);
+
+    cacheStore.fetchResults = { timestamp };
+
+    sut.validate();
+
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
+    expect(cacheStore.fetchKey).toBe('purchases');
   });
 });
