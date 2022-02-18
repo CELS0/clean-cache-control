@@ -1,7 +1,19 @@
-import { LoadPurchases, SavePurchases } from "@/domain/usecases";
+import {  SavePurchases } from "@/domain/usecases";
 import { ICacheStore } from "../prococols/cache";
 
+type DateExpiration = {
+  timestamp: Date,
+  currentDate: Date,
+}
 
+export const getCacheExpirationDate = (): DateExpiration => {
+  const currentDate = new Date();
+
+  const timestamp = new Date(currentDate);
+  timestamp.setDate(timestamp.getDate() - 3);
+
+  return { timestamp, currentDate }
+}
 class CacheStoreSpy implements ICacheStore {
   actions: Array<CacheStoreSpy.Action> = [];
   deletekey: string;
