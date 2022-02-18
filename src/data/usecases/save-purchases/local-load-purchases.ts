@@ -6,17 +6,26 @@ class LocalLoadPurchases implements SavePurchases, LoadPurchases {
 
   constructor(
     private cacheStore: ICacheStore,
-    private timestamp: Date
+    private currentDate: Date
   ) { }
 
   async save(purchases: Array<SavePurchases.Params>): Promise<void> {
-    this.cacheStore.replace(this.key, { timestamp: this.timestamp, value: purchases });
+    this.cacheStore.replace(this.key, { timestamp: this.currentDate, value: purchases });
   }
 
   async loadAll(): Promise<Array<LoadPurchases.Result>> {
     try {
       const cache = this.cacheStore.fetch(this.key);
-      return cache.value;
+      
+      const maxAge = new Date(cache.timestamp);
+      maxAge.setDate(maxAge.getDate() + 3);
+
+      if(maxAge > this.currentDate){
+        return cache.value;
+      }
+
+      throw new Error();
+
     } catch {
       this.cacheStore.delete(this.key);
       return []
