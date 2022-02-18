@@ -3,7 +3,7 @@ import { SavePurchases } from "@/domain/usecases";
 interface ICacheStore {
   delete: (key: string) => void;
   insert: (insertKey: string, value: any) => void;
-  fetch:(key: string) => void;
+  fetch:(key: string) => any;
   replace: (key: string, value:any)=> void;
 }
 

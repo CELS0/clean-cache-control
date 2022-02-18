@@ -1,69 +1,72 @@
-import { SavePurchases } from "@/domain/usecases";
+import { LoadPurchases, SavePurchases } from "@/domain/usecases";
 import { ICacheStore } from "../prococols/cache";
 
-  
-  class CacheStoreSpy implements ICacheStore {
-    actions: Array<CacheStoreSpy.Action> = [];
-    deletekey: string;
-    insertKey: string;
-    fetchKey: string;
-    insertValues: Array<SavePurchases.Params>;
-    
-    insert(insertKey: string, value:any): void{
-      this.actions.push(CacheStoreSpy.Action.insert);
-      this.insertKey = insertKey;
-      this.insertValues = value;
-    };
-  
-    delete(deletekey: string): void {
-      this.actions.push(CacheStoreSpy.Action.delete);
-      this.deletekey = deletekey;
-    };
 
-    fetch(key: string): void {
-      this.actions.push(CacheStoreSpy.Action.fetch);
-      this.fetchKey = key;
-    };
+class CacheStoreSpy implements ICacheStore {
+  actions: Array<CacheStoreSpy.Action> = [];
+  deletekey: string;
+  insertKey: string;
+  fetchKey: string;
+  insertValues: Array<SavePurchases.Params>;
+  fetchResults: any;
 
-    replace(key: string, value:any): void {
-      this.delete(key);
-      this.insert(key,value);
-    };
+  insert(insertKey: string, value: any): void {
+    this.actions.push(CacheStoreSpy.Action.insert);
+    this.insertKey = insertKey;
+    this.insertValues = value;
+  };
 
-    simulateDeleteError (): void {
-      jest
+  delete(deletekey: string): void {
+    this.actions.push(CacheStoreSpy.Action.delete);
+    this.deletekey = deletekey;
+  };
+
+  fetch(key: string): any {
+    this.actions.push(CacheStoreSpy.Action.fetch);
+    this.fetchKey = key;
+
+    return this.fetchResults;
+  };
+
+  replace(key: string, value: any): void {
+    this.delete(key);
+    this.insert(key, value);
+  };
+
+  simulateDeleteError(): void {
+    jest
       .spyOn(CacheStoreSpy.prototype, 'delete')
-      .mockImplementationOnce(()=>{
+      .mockImplementationOnce(() => {
         this.actions.push(CacheStoreSpy.Action.delete);
         throw new Error()
       })
-    }
+  }
 
-    simulateInsertError (): void {
-      jest
+  simulateInsertError(): void {
+    jest
       .spyOn(CacheStoreSpy.prototype, 'insert')
-      .mockImplementationOnce(()=>{
+      .mockImplementationOnce(() => {
         this.actions.push(CacheStoreSpy.Action.insert);
         throw new Error()
       })
-    }
+  }
 
-    simulateFetchError (): void {
-      jest
+  simulateFetchError(): void {
+    jest
       .spyOn(CacheStoreSpy.prototype, 'fetch')
-      .mockImplementationOnce(()=>{
+      .mockImplementationOnce(() => {
         this.actions.push(CacheStoreSpy.Action.fetch);
         throw new Error()
       })
-    }
   }
+}
 
-  namespace CacheStoreSpy {
-    export enum Action {
-      delete,
-      insert,
-      fetch,
-    }
+namespace CacheStoreSpy {
+  export enum Action {
+    delete,
+    insert,
+    fetch,
   }
-  
-  export { ICacheStore, CacheStoreSpy }
+}
+
+export { ICacheStore, CacheStoreSpy }

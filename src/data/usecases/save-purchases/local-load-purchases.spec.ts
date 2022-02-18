@@ -26,15 +26,6 @@ describe('LocalSavePurchases', () => {
     expect(cacheStore.actions).toEqual([])
   });
 
-  test('Should call correct key on load', async () => {
-    const { cacheStore, sut } = makeSut();
-
-    await sut.loadAll();
-
-    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch]);
-    expect(cacheStore.fetchKey).toBe('purchases');
-  });
-
   test('Should return empty list if load fails', async () => {
     const { cacheStore, sut } = makeSut();
 
@@ -46,4 +37,21 @@ describe('LocalSavePurchases', () => {
     expect(cacheStore.deletekey).toBe('purchases');
     expect(purchases).toEqual([]);
   });
+
+  test('Should return a list of purchases if cache is less than 3 day old', async () => {
+    const timestamp = new Date();
+    const { cacheStore, sut, purchases } = makeSut(timestamp);
+
+    cacheStore.fetchResults = {
+      timestamp,
+      value: purchases,
+    }
+
+    const result = await sut.loadAll();
+
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
+    expect(cacheStore.fetchKey).toBe('purchases');
+    expect(result).toEqual(cacheStore.fetchResults.value);
+  });
+
 });
