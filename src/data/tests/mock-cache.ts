@@ -1,6 +1,8 @@
 import {  SavePurchases } from "@/domain/usecases";
 import { ICacheStore } from "../prococols/cache";
 
+const maxAgeInDays = 3;
+
 type DateExpiration = {
   timestamp: Date,
   currentDate: Date,
@@ -10,7 +12,7 @@ export const getCacheExpirationDate = (): DateExpiration => {
   const currentDate = new Date();
 
   const timestamp = new Date(currentDate);
-  timestamp.setDate(timestamp.getDate() - 3);
+  timestamp.setDate(timestamp.getDate() - maxAgeInDays);
 
   return { timestamp, currentDate }
 }
