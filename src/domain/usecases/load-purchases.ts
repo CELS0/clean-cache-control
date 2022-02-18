@@ -1,7 +1,7 @@
 import { PurchasesModel } from "../models/purchase-model"
 
 interface LoadPurchases {
-    loadll: (purchases: Promise<Array<LoadPurchases.Result>>) => Promise<void>;
+    loadAll:() => Promise<Array<LoadPurchases.Result>>;
 }
 
 namespace LoadPurchases {

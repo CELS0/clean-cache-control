@@ -47,6 +47,15 @@ import { ICacheStore } from "../prococols/cache";
         throw new Error()
       })
     }
+
+    simulateFetchError (): void {
+      jest
+      .spyOn(CacheStoreSpy.prototype, 'fetch')
+      .mockImplementationOnce(()=>{
+        this.actions.push(CacheStoreSpy.Action.fetch);
+        throw new Error()
+      })
+    }
   }
 
   namespace CacheStoreSpy {
