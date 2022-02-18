@@ -33,8 +33,7 @@ describe('LocalLoadPurchases', () => {
 
     const purchases = await sut.loadAll();
 
-    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete]);
-    expect(cacheStore.deletekey).toBe('purchases');
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch]);
     expect(purchases).toEqual([]);
   });
 

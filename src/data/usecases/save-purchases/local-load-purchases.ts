@@ -22,10 +22,10 @@ class LocalLoadPurchases implements SavePurchases, LoadPurchases {
         return cache.value;
       }
 
-      throw new Error();
+      this.cacheStore.delete(this.key);
+      return []
 
     } catch {
-      this.cacheStore.delete(this.key);
       return []
     }
   }
